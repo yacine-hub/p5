@@ -44,6 +44,7 @@ function displayProduct(prod, product, qty, color){
     let totalPriceByProduct = product.price * qty;
     console.log( totalPriceByProduct)
     
+
     /*let prodArticle = document.createElement("article");
     //document.querySelector("#cart_items").appendChild(prodArticle);
     prodArticle.className = "cart_item";
@@ -119,20 +120,59 @@ function displayProduct(prod, product, qty, color){
     quantité.setAttribute("max","100");
     
     
-        // Utilisation de "append" afin d'ajouter les éléments attribuer dpuis le tableau
-    /*prodArticle.append(productImg, /*productName,productText );
-    prodArticle.append(productArticle);
-    document.getElementById("cart__item").append(productArticle)*/
-   
-    /*
-    let prodColor = document.createElement("couleur");
-    prodColor.innerHTML = produitStorage.product-color;
+    let deleteSettings = document.createElement("div");
+    prodItemSetting.appendChild(deleteSettings);
+    deleteSettings.className = "cart__item__content__settings__delete";
 
+    console.log(deleteSettings);
 
-    let prodQuantity = document.createElement("quantité");
-    document.querySelector("#cart__item__content__settings__quantity").appendChild(prodQuantity);
-    prodQuantity.innerHTML = "quantité: ";*/
+    let prodDelete = document.createElement("p");
+    deleteSettings.appendChild(prodDelete);
+    prodDelete.innerHTML = "supprimer";
+    prodDelete.className = "deleteItem";
+    
+    
 }
+getTotal();
+/* calcul total des produits selectionner
+    additionner et soustraire les produit ajouter ou supprimer*/
+    
+function getTotal(){
+    
+    // Partie quantité: recuperer les quantité
+    
+    let qtyProd = document.getElementsByClassName('itemQuantity');
+    
+    numberTotal = 0;
+
+    for (let i = 0; i <qtyProd.length ; ++i){
+      numberTotal += qtyProd[i].valueAsNumber;
+       
+    }
+    console.log(numberTotal);
+    
+    let totalQuantity = document.getElementById('totalQuantity');
+    totalQuantity.textContent = numberTotal;
+    console.log(numberTotal);
+
+    /*prixTotal = 0;
+
+    for (let i = 0; i < numberOfProd; ++i){
+    //prixTotal += (qtyProd[i].valueAsNumber * produitStorage[i].price);
+   
+
+    }
+
+    let prodPrixTotal = document.getElementById('totalPrice');
+    prodPrixTotal.innerHTML = totalPrice;
+    console.log(totalPrice);
+    */
+
+}
+
+
+
+
 
 /*<!--  <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
                 <div class="cart__item__img">

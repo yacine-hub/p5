@@ -155,26 +155,56 @@ function getTotal(){
     totalQuantity.textContent = numberTotal;
     console.log(numberTotal);
 
-    /*prixTotal = 0;
 
-    for (let i = 0; i < numberOfProd; ++i){
-    //prixTotal += (qtyProd[i].valueAsNumber * produitStorage[i].price);
+    prixTotal = 0;
+
+    for (let a = 0; a < qtyProd; a++){
+    prixTotal += (qtyProd[a].valueAsNumber * produitStorage[a].price);
    
 
     }
 
     let prodPrixTotal = document.getElementById('totalPrice');
-    prodPrixTotal.innerHTML = totalPrice;
+    prodPrixTotal.textContent = totalPrice;
     console.log(totalPrice);
-    */
+    
+
+    //getModifQuantity();
+}
+//partie modification 
+
+/*function getModifQuantity(){
+    
+    let modifQuant = document.querySelectorAll('itemQuantity');
+
+    for (let n = 0; n< modifQuant.length; n++){
+        modifQuant[n].addEventListener(function (event) {
+            event.preventDefault();
+            
+            produitStorage[n].qty = event.target.value;
+
+            if(
+                produitStorage[n].qty== 0 || produitStorage[n].qty > 100)
+            {
+                alert('sélectionner une quantité comprise entre 1 et 100');
+                
+            }else{
+                localStorage.setItem('produits', JSON.stringify(produitStorage));
+        
+        }
+    }
+}*/
+deleteProd();
+function deleteProd(){
+    let suppProd = document.querySelector('deleteItem');
+    for(let y = 0; y < suppProd.length; y++){
+        suppProd[y].addEventListener('click',(e) =>{
+            e.preventDefault();
+        })
+    }
 
 }
-
-
-
-
-
-/*<!--  <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
+    /*<!--  <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
                 <div class="cart__item__img">
                   <img src="../images/product01.jpg" alt="Photographie d'un canapé">
                 </div>
@@ -196,4 +226,3 @@ function getTotal(){
                 </div>
               </article> -->
               */
-              

@@ -12,11 +12,12 @@ je fait la boucle, je creer les éléments
 function getCart(){
     let produitStorage = JSON.parse(localStorage.getItem("produits"));
     console.log(produitStorage);
-    let totalPrice;
+    let totPrice = 0;
+    let totQty = 0;
     if (produitStorage === null){
         alert("votre panier est vide")
     } else {
-        let totalPrice = 0;
+        
         for (let i in produitStorage){ // insert les éléments du fichier cart.html 
             fetch ("http://localhost:3000/api/products/"+ produitStorage[i]._id)
             .then(response => response.json())
@@ -25,10 +26,16 @@ function getCart(){
                 displayProduct(data, produitStorage[i].qty, produitStorage[i].color);
                 console.log(produitStorage[i].qty)
                 console.log(data.price)
-                // 
-                totalPrice += data.price * produitStorage[i].qty;;// accummuler les prix de chaque par la quantité
-                console.log(totalPrice);
                 
+                totQty += parseInt(produitStorage[i].qty);
+                let qp = document.getElementById('totalQuantity');
+                qp.textContent = totQty;
+
+                totPrice += parseInt(data.price) * parseInt(produitStorage[i].qty);// accummuler les prix de chaque par la quantité
+                console.log(totPrice);
+                
+                let tp = document.getElementById('totalPrice');
+                tp.textContent = totPrice; 
             }) 
         }
         
@@ -37,11 +44,11 @@ function getCart(){
 }
 
 
-function displayProduct(prod, product, qty, color){
+function displayProduct(prod, qty, color){
     
-    console.log(product);
+    console.log(prod);
     console.log(color);
-    let totalPriceByProduct = product.price * qty;
+    let totalPriceByProduct = prod.price * qty;
     console.log( totalPriceByProduct)
     
 
@@ -87,17 +94,17 @@ function displayProduct(prod, product, qty, color){
     // Insertion du titre 
     let prodTitle = document.createElement("h2");
     prodItemContentTitlePrice.appendChild(prodTitle);
-    prodTitle.innerHTML = prod.name;
+    prodTitle.textContent = prod.name;
 
     // Insertion de la couleur
     let prodColor = document.createElement("p");
     prodTitle.appendChild(prodColor);
-    prodColor.innerHTML = prod.colors;
+    prodColor.textContent = color;
     prodColor.style.fontSize = "15px";
     
     let prodPrice = document.createElement("p");
     prodItemContentTitlePrice.appendChild(prodPrice);
-    prodPrice.innerHTML = prod.price + "€";
+    prodPrice.textContent = (prod.price * qty)  + "€";
 
     let prodItemSetting = document.createElement("div");
     prodItemContent.appendChild(prodItemSetting);
@@ -109,7 +116,7 @@ function displayProduct(prod, product, qty, color){
 
     let prodQuantity = document.createElement("p");
     prodItemQty.appendChild(prodQuantity);
-    prodQuantity.innerHTML = "Quantité : " ;
+    prodQuantity.textContent = "Quantité : ";
 
     let quantité = document.createElement("input");
     prodQuantity.appendChild(quantité);
@@ -118,7 +125,7 @@ function displayProduct(prod, product, qty, color){
     quantité.setAttribute("name","itemQuantity");
     quantité.setAttribute("min","1");
     quantité.setAttribute("max","100");
-    
+    quantité.setAttribute("value",qty);
     
     let deleteSettings = document.createElement("div");
     prodItemSetting.appendChild(deleteSettings);
@@ -128,24 +135,24 @@ function displayProduct(prod, product, qty, color){
 
     let prodDelete = document.createElement("p");
     deleteSettings.appendChild(prodDelete);
-    prodDelete.innerHTML = "supprimer";
+    prodDelete.textContent = "supprimer";
     prodDelete.className = "deleteItem";
     
     
 }
-getTotal();
+
 /* calcul total des produits selectionner
     additionner et soustraire les produit ajouter ou supprimer*/
     
-function getTotal(){
+/*function getTotal(){
     
     // Partie quantité: recuperer les quantité
     
     let qtyProd = document.getElementsByClassName('itemQuantity');
-    
-    numberTotal = 0;
+    console.log(qtyProd);
+    let numberTotal = 0;
 
-    for (let i = 0; i <qtyProd.length ; ++i){
+    for (let i = 0; i < qtyProd.length ; ++i){
       numberTotal += qtyProd[i].valueAsNumber;
        
     }
@@ -155,55 +162,61 @@ function getTotal(){
     totalQuantity.textContent = numberTotal;
     console.log(numberTotal);
 
-
-    prixTotal = 0;
-
-    for (let a = 0; a < qtyProd; a++){
-    prixTotal += (qtyProd[a].valueAsNumber * produitStorage[a].price);
-   
-
-    }
-
-    let prodPrixTotal = document.getElementById('totalPrice');
-    prodPrixTotal.textContent = totalPrice;
-    console.log(totalPrice);
-    
-
-    //getModifQuantity();
-}
+    getModifQuantity();
+}*/
 //partie modification 
 
-/*function getModifQuantity(){
+function getModifQuantity(){
     
-    let modifQuant = document.querySelectorAll('itemQuantity');
+    const modifQuant = document.querySelectorAll('.itemQuantity');
 
-    for (let n = 0; n< modifQuant.length; n++){
-        modifQuant[n].addEventListener(function (event) {
+    for (let n = 0; n < modifQuant.length; n++) {
+        modifQuant[n].addEventListener('modif', function (event) {
             event.preventDefault();
             
             produitStorage[n].qty = event.target.value;
 
             if(
-                produitStorage[n].qty== 0 || produitStorage[n].qty > 100)
+                produitStorage[n].qty == 0 || produitStorage[n].qty > 100)
             {
                 alert('sélectionner une quantité comprise entre 1 et 100');
                 
             }else{
                 localStorage.setItem('produits', JSON.stringify(produitStorage));
         
-        }
+            }
+        });
     }
-}*/
-deleteProd();
-function deleteProd(){
-    let suppProd = document.querySelector('deleteItem');
-    for(let y = 0; y < suppProd.length; y++){
-        suppProd[y].addEventListener('click',(e) =>{
-            e.preventDefault();
-        })
-    }
-
+    
+    suppItem();
 }
+function suppItem() {
+    const delItem = document.querySelectorAll('.deleteItem');
+    for (let e = 0; e < delItem.length; e++) {
+      delItem[e].addEventListener('click', (e) => {
+        e.preventDefault();
+        //demande de confirmation de la suppression de l'article
+        if (
+          window.confirm(
+            `Êtes- vous sur de vouloir supprimer ${produitStorage[e].qty} ${produitStorage[e].name} de couleur ${produitStorage[e].color} ?`
+          )
+        ) {
+          let idDelItem = produitStorage[e]._id;
+          let colorDelItem = produitStorage[e].color;
+  
+          produitStorage = produitStorage.filter(
+            (element) =>
+              element._id!== idDelItem || element.color !== colorDelItem
+          );
+         
+        }
+      });
+    }console.log(suppItem);
+}
+
+   
+
+    
     /*<!--  <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
                 <div class="cart__item__img">
                   <img src="../images/product01.jpg" alt="Photographie d'un canapé">

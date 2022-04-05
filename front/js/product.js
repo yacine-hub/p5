@@ -112,9 +112,7 @@ function stockage(prod){
     console.log('insert');      
     localStorage.setItem('produits', JSON.stringify(produitStorage));
     return true; 
-    
 }
-
 function checkBasket (panier, prod){
     let control = true;    
     panier.forEach(elem => {
@@ -127,11 +125,6 @@ function checkBasket (panier, prod){
     return control;
       
 }
-
-    
-
-
-
 function checkColor(color){
     if(!color){
         alert("veuillez selectionner une couleur")

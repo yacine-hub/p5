@@ -51,20 +51,6 @@ function displayProduct(prod, qty, color){
     let totalPriceByProduct = prod.price * qty;
     console.log( totalPriceByProduct)
     
-
-    /*let prodArticle = document.createElement("article");
-    //document.querySelector("#cart_items").appendChild(prodArticle);
-    prodArticle.className = "cart_item";
-    prodArticle.setAttribute('data-id',prod._id);
-    prodArticle.setAttribute('data-color',prod._id);
-    
-    
-    let prodImg = document.createElement("img");
-    prodArticle.appendChild(prodImg);
-    prodImg.className = "cart_item_img";
-    prodImg.src = prod.imageUrl;
-    prodImg.alt = prod.altTxt;*/
-
     let prodArticle = document.createElement("article");
     document.querySelector("#cart__items").appendChild(prodArticle);
     prodArticle.className = "cart__item";
@@ -126,49 +112,35 @@ function displayProduct(prod, qty, color){
     quantité.setAttribute("min","1");
     quantité.setAttribute("max","100");
     quantité.setAttribute("value",qty);
-    
+    // attacher un evement a l'element quantité (adevenListener) change 
+    quantité.addEventListener("change",(e)=>{
+        getModifQuantity(e);
+    })
     let deleteSettings = document.createElement("div");
     prodItemSetting.appendChild(deleteSettings);
     deleteSettings.className = "cart__item__content__settings__delete";
-
-    console.log(deleteSettings);
 
     let prodDelete = document.createElement("p");
     deleteSettings.appendChild(prodDelete);
     prodDelete.textContent = "supprimer";
     prodDelete.className = "deleteItem";
-    
+    prodDelete.addEventListener("click",(e)=>{
+        suppItem(e);
+    })
+    //attacher un evenement qui appel la fonction "suppItem" (adeventListener) 
+    //lorsque je clique sur supprimer, closest remonte au parent
     
 }
 
 /* calcul total des produits selectionner
     additionner et soustraire les produit ajouter ou supprimer*/
     
-/*function getTotal(){
-    
-    // Partie quantité: recuperer les quantité
-    
-    let qtyProd = document.getElementsByClassName('itemQuantity');
-    console.log(qtyProd);
-    let numberTotal = 0;
 
-    for (let i = 0; i < qtyProd.length ; ++i){
-      numberTotal += qtyProd[i].valueAsNumber;
-       
-    }
-    console.log(numberTotal);
-    
-    let totalQuantity = document.getElementById('totalQuantity');
-    totalQuantity.textContent = numberTotal;
-    console.log(numberTotal);
-
-    getModifQuantity();
-}*/
 //partie modification 
 
-function getModifQuantity(){
+function getModifQuantity(e){
     
-    const modifQuant = document.querySelectorAll('.itemQuantity');
+    /*const modifQuant = document.querySelectorAll('.itemQuantity');
 
     for (let n = 0; n < modifQuant.length; n++) {
         modifQuant[n].addEventListener('modif', function (event) {
@@ -186,56 +158,64 @@ function getModifQuantity(){
         
             }
         });
+    
+    }*/
+    
+    console.log(e)
+    //suppItem();
+}
+
+function suppItem(e) {
+    //closest pour remonter jusqu'au parent( article,class..)
+    //appeller la fonction qui modifie le prix total (getElementbyId)
+    //appel la fonction qui modifie la quantité total
+    
+    const toto = e.target.closest("article");
+    toto.remove();
+    
+    
+    let modifQuant = document.getElementById("totalQuantity");
+    console.log(modifQuant);
+   
+    moins.forEach((negative) => {
+        negative.addEventListener("click", () => {
+          console.log(negative);
+    
+          let totalProduit = prodDelete.length;
+    
+          for (i = 0; i < totalProduit; i++) {
+            console.log(totalProduit);
+            if (prodDelete[i].qty == 1 && totalProduit == 1) {
+              return (
+                localStorage.removeItem("produit")
+        
+            );
+        
     }
     
-    suppItem();
-}
-function suppItem() {
-    const delItem = document.querySelectorAll('.deleteItem');
-    for (let e = 0; e < delItem.length; e++) {
-      delItem[e].addEventListener('click', (e) => {
-        e.preventDefault();
-        //demande de confirmation de la suppression de l'article
-        if (
-          window.confirm(
-            `Êtes- vous sur de vouloir supprimer ${produitStorage[e].qty} ${produitStorage[e].name} de couleur ${produitStorage[e].color} ?`
-          )
-        ) {
-          let idDelItem = produitStorage[e]._id;
-          let colorDelItem = produitStorage[e].color;
+    /*let modifQuant = document.getElementById('totalQuantity');
+    
+    for (let i = 0; i < modifQuant.length; i++){
+        console.log(modifQuant[i])
+        modifQuant[i].addEventListener("click" , () => {
+            localStorage.removeItem(modifQuant[i]);
+
+
+        })
+        localStorage.setItem('produit', JSON.stringify(produitStorage));
+    }*/
+
+    //id="totalQuantity"><!-- 2 --></span> articles) : <span id="totalPrice">
+    //localStorage.removeItem('produits');
   
-          produitStorage = produitStorage.filter(
-            (element) =>
-              element._id!== idDelItem || element.color !== colorDelItem
-          );
-         
-        }
-      });
-    }console.log(suppItem);
+
+    
+    
+    
 }
+
+
 
    
 
     
-    /*<!--  <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
-                <div class="cart__item__img">
-                  <img src="../images/product01.jpg" alt="Photographie d'un canapé">
-                </div>
-                <div class="cart__item__content">
-                  <div class="cart__item__content__description">
-                    <h2>Nom du produit</h2>
-                    <p>Vert</p>
-                    <p>42,00 €</p>
-                  </div>
-                  <div class="cart__item__content__settings">
-                    <div class="cart__item__content__settings__quantity">
-                      <p>Qté : </p>
-                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
-                    </div>
-                    <div class="cart__item__content__settings__delete">
-                      <p class="deleteItem">Supprimer</p>
-                    </div>
-                  </div>
-                </div>
-              </article> -->
-              */

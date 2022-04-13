@@ -65,7 +65,7 @@ function add(id){
    console.log(quant);
    
 
-   if(checkColor(color) || checkQuantity(quant)){
+   if(checkColor(color) && checkQuantity(quant)){
         let prod = {
             _id: id,
             qty: quant,
@@ -129,33 +129,20 @@ function checkColor(color){
     if(!color){
         alert("veuillez selectionner une couleur")
         return false;
-    } else {
-        console.log("J'ai sélectionné une couleur");
     }
+    return true;
 }
 // 2:Verifie la valeur du champ  input (id quantity) cet valeur doit etre sup a 0 inferieur a 100 
 
 function checkQuantity(qty){
-    //if(parseInt(quant) < 1 || parseInt(quant) > 100 ){
-        if(parseInt(qty) < 1 || parseInt(qty) > 100){
-         /*else {
-            console.log("sa ne fonctionne pas")
-        }*/
-        //if(parseInt(quant) > 0 && parseInt(quant) <=100 && parseInt(quant) != 0){
+    if(parseInt(qty) < 1 || parseInt(qty) > 100){
         alert("vous ne pouvez séléctionner que de 1 a 100")
-    
         return false;
     }
-    
-      return qty;
-    
+    return qty;
 }
   
-// 4: import dans le localStorage
 
-//let cart = JSON.parse(localStorage.getItem("prod"));
-//console.log(prod);
- 
 
 
 

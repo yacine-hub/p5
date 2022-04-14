@@ -162,7 +162,7 @@ function getModifQuantity(e){
     }*/
     
     console.log(e)
-    //suppItem();
+    
 }
 
 function suppItem(e) {
@@ -174,45 +174,45 @@ function suppItem(e) {
     toto.remove();
     
     
-    let modifQuant = document.getElementById("totalQuantity");
-    console.log(modifQuant);
-   
-    moins.forEach((negative) => {
-        negative.addEventListener("click", () => {
-          console.log(negative);
-    
-          let totalProduit = prodDelete.length;
-    
-          for (i = 0; i < totalProduit; i++) {
-            console.log(totalProduit);
-            if (prodDelete[i].qty == 1 && totalProduit == 1) {
-              return (
-                localStorage.removeItem("produit")
-        
-            );
-        
-    }
-    
-    /*let modifQuant = document.getElementById('totalQuantity');
-    
-    for (let i = 0; i < modifQuant.length; i++){
-        console.log(modifQuant[i])
-        modifQuant[i].addEventListener("click" , () => {
-            localStorage.removeItem(modifQuant[i]);
+    let ttPrice = document.getElementById("totalPrice");
+    console.log(ttPrice);
+    ttPrice.addEventListener("click", () => {
+        console.log(ttPrice);
+       
+        let ttProduit = produitStorage.length;
+
+        for (i = 0; i < ttProduit; i++) {
+            console.log(ttProduit);
+            if (produitStorage[i].price == 1 && ttProduit == 1 ){
+                return (
+                    localStorage.removeItem("produit"),
+                    console.log("supprime tout le panier")
+                );
+
+            }
+            if (produitStorage[i].price== 1 && ttProduit != 1 && produitStorage[i] == ttPrice.prod.price
+            ){
+                produitStorage.splice(i, 1);
+                localStorage.setItem("produits", JSON.stringify(produitStorage));
+                location.href = "panier.html";
+                console.log("remove le produit en question");
+            }
+        }
+    })
+}     
+
+//si la quantité est < 1 alors tout le panier est vide
+//si la quantité est superieur ou egale a 1 alors je supprime le produits selectionner dans le localStorage
 
 
-        })
-        localStorage.setItem('produit', JSON.stringify(produitStorage));
-    }*/
-
-    //id="totalQuantity"><!-- 2 --></span> articles) : <span id="totalPrice">
-    //localStorage.removeItem('produits');
+//id="totalQuantity"><!-- 2 --></span> articles) : <span id="totalPrice">
+//localStorage.removeItem('produits');
   
 
     
     
-    
-}
+
+
 
 
 

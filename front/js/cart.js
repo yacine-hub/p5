@@ -199,6 +199,7 @@ function suppItem(e) {
             }
         }
     })
+    getform();
 }     
 
 //si la quantité est < 1 alors tout le panier est vide
@@ -209,8 +210,68 @@ function suppItem(e) {
 //localStorage.removeItem('produits');
   
 
+//----------------Partie Formulaire-----------------
+
+function getform() {
+    
+        
+    let formData = new FormData();
+    let firstName = document.getElementById('firstname');
+    firstName.addEventListener('input', () => {
+        
+        if (formData.append(firstName.value) === false) {
+            document.getElementById('firstNameErrorMsg').textContent =
+              'Format incorrect';
+          } else {
+            document.getElementById('firstNameErrorMsg').textContent = '';
+        }
+    });
+       
+    let lastName = document.getElementById('lastname');
+        lastName.addEventListener('input', () => {
+            
+        if (formData.append(lastName.value) === false) {
+            document.getElementById('lastNameErrorMsg').textContent =
+              'Format incorrect';
+            } else {
+            document.getElementById('lastNameErrorMsg').textContent = '';
+        }
+    });
+      
+    let adress = document.getElementById('adress');
+    adress.addEventListener('input', () => {
+        
+        if (formData.append(adress.value) === false) {
+            document.getElementById('adressErrorMsg').textContent =
+              'Format incorrect';
+            } else {
+            document.getElementById('adressErrorMsg').textContent = '';
+        }
+    });
+    
+    let city = document.getElementById('city');
+    city.addEventListener('input', () => {
+        
+        if (formData.append(city.value) === false) {
+            document.getElementById('cityErrorMsg').textContent =
+              'Format incorrect';
+            } else {
+            document.getElementById('cityErrorMsg').textContent = '';
+        }
+    });
+    let email = document.getElementById('email');
+    email.addEventListener('input', () => {
+        
+        if (formData.append(email.value) === false) {
+            document.getElementById('emailErrorMsg').textContent =
+              'Format incorrect';
+            } else {
+            document.getElementById('emailErrorMsg').textContent = '';
+        }
+    });
     
     
+}
 
 
 

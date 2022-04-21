@@ -38,11 +38,13 @@ function getCart(){
                 tp.textContent = totPrice; 
             }) 
         }
-        
+       addEvent(); 
     }
     
 }
-
+function addEvent(){
+    document.getElementById("order").addEventListener('click', getForm );
+}
 
 function displayProduct(prod, qty, color){
     
@@ -124,6 +126,9 @@ function displayProduct(prod, qty, color){
     deleteSettings.appendChild(prodDelete);
     prodDelete.textContent = "supprimer";
     prodDelete.className = "deleteItem";
+    prodDelete.myParamId = prod._id;
+    prodDelete.myParamOpt = color;
+    prodDelete.myParamPrice = prod.price;
     prodDelete.addEventListener("click",(e)=>{
         suppItem(e);
     })
@@ -140,26 +145,8 @@ function displayProduct(prod, qty, color){
 
 function getModifQuantity(e){
     
-    /*const modifQuant = document.querySelectorAll('.itemQuantity');
-
-    for (let n = 0; n < modifQuant.length; n++) {
-        modifQuant[n].addEventListener('modif', function (event) {
-            event.preventDefault();
-            
-            produitStorage[n].qty = event.target.value;
-
-            if(
-                produitStorage[n].qty == 0 || produitStorage[n].qty > 100)
-            {
-                alert('sélectionner une quantité comprise entre 1 et 100');
-                
-            }else{
-                localStorage.setItem('produits', JSON.stringify(produitStorage));
-        
-            }
-        });
-    
-    }*/
+    let ttPrice = document.getElementById("totalPrice").textContent;
+    let ttQuantity = document.getElementById("totalQuantity").textContent;
     
     console.log(e)
     
@@ -173,37 +160,49 @@ function suppItem(e) {
     const toto = e.target.closest("article");
     toto.remove();
     
+    console.log(e);
     
-    let ttPrice = document.getElementById("totalPrice");
-    console.log(ttPrice);
-    ttPrice.addEventListener("click", () => {
-        console.log(ttPrice);
-       
-        let ttProduit = produitStorage.length;
+    //console.log(ttPrice);
+   
+       let produitStorage = JSON.parse(localStorage.getItem("produits"));
+        
 
-        for (i = 0; i < ttProduit; i++) {
-            console.log(ttProduit);
-            if (produitStorage[i].price == 1 && ttProduit == 1 ){
+        for (i = 0; i < produitStorage; i++) {
+            
+            /*
+            if (produitStorage[i].== 1 && ttProduit == 1 ){
                 return (
                     localStorage.removeItem("produit"),
                     console.log("supprime tout le panier")
                 );
 
-            }
-            if (produitStorage[i].price== 1 && ttProduit != 1 && produitStorage[i] == ttPrice.prod.price
-            ){
-                produitStorage.splice(i, 1);
-                localStorage.setItem("produits", JSON.stringify(produitStorage));
-                location.href = "panier.html";
-                console.log("remove le produit en question");
-            }
+            }*/
+            if (produitStorage[i]._id == e.target.myParamId &&  produitStorage[i].color == e.target.myParamOpt){
+                
+                let ttPrice = document.getElementById("totalPrice").textContent;
+                let ttQuantity = document.getElementById("totalQuantity").textContent;
+                //le prix du produit qu'on veut supprimer x  la quantité supprimer. (myparamPrice )
+                let quantity = document.getElementsByClassName("itemQuantity").value
+                
+                let ttPriceAsupp = parseInt(quantity) * parseInt(e.target.myParamPrice)
+                let ttQuantiteAsupp = parseInt(price) * parseInt(e.target.myParamId)
+                ttPrice = document.getElementById("totalPrice").textContent = ttPriceAsupp;
+                ttQuantity = document.getElementById("totalQuantity").textContent = ttQuantiteAsupp;
+                ttPriceAsupp * ttQuantiteAsupp;
+                //supprimer ce produit du localStorage et toto remove
+                return (
+                    localStorage.removeClear("produits"),
+                    console.log(ttPriceAsupp)
+                );
+            }  
         }
-    })
-    getform();
+    
+
+
+   
 }     
 
-//si la quantité est < 1 alors tout le panier est vide
-//si la quantité est superieur ou egale a 1 alors je supprime le produits selectionner dans le localStorage
+
 
 
 //id="totalQuantity"><!-- 2 --></span> articles) : <span id="totalPrice">
@@ -212,10 +211,13 @@ function suppItem(e) {
 
 //----------------Partie Formulaire-----------------
 
-function getform() {
+function getForm() {
     
         
-    let formData = new FormData();
+    /*let formData = new FormData();
+    
+    
+    
     let firstName = document.getElementById('firstname');
     firstName.addEventListener('input', () => {
         
@@ -226,7 +228,8 @@ function getform() {
             document.getElementById('firstNameErrorMsg').textContent = '';
         }
     });
-       
+       console.log(formData);
+
     let lastName = document.getElementById('lastname');
         lastName.addEventListener('input', () => {
             
@@ -270,9 +273,28 @@ function getform() {
         }
     });
     
-    
+    const commande = documentgetElemebtById("order");
+        //recuperer le formulaire client lorsque je clique sur commander
+    commande.addEventListener("click", (e) =>{
+        
+        let sendFirstName = document.getElementById('firstName');
+        let sendLastName = document.getElementById('lastName');
+        let sendAdress = document.getElementById('adress');
+        let sendCity = document.getElementById('city');
+        let sendMail = document.getElementById('mail');
+
+        let idProducts = [];
+        for (let i = 0; i<produitStorage.length;i++) {
+            idProducts.push(produitStorage[i].prod_.id);
+        }
+        console.log(idProducts);
+
+    })*/
 }
 
+//envoyer les info du clien au localstorage
+
+    
 
 
 

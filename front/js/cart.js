@@ -159,45 +159,40 @@ function suppItem(e) {
     
     const toto = e.target.closest("article");
     toto.remove();
-    
     console.log(e);
     
-    //console.log(ttPrice);
    
-       let produitStorage = JSON.parse(localStorage.getItem("produits"));
+   
+    let produitStorage = JSON.parse(localStorage.getItem("produits"));
         
 
-        for (i = 0; i < produitStorage; i++) {
+    for (i = 0; i < produitStorage; i++) {
             
             /*
             if (produitStorage[i].== 1 && ttProduit == 1 ){
                 return (
-                    localStorage.removeItem("produit"),
+                    localStorage.removeItem("produits");
                     console.log("supprime tout le panier")
                 );
 
             }*/
-            if (produitStorage[i]._id == e.target.myParamId &&  produitStorage[i].color == e.target.myParamOpt){
+        if (produitStorage[i]._id == e.target.myParamId &&  produitStorage[i].color == e.target.myParamOpt){
                 
-                let ttPrice = document.getElementById("totalPrice").textContent;
-                let ttQuantity = document.getElementById("totalQuantity").textContent;
-                //le prix du produit qu'on veut supprimer x  la quantité supprimer. (myparamPrice )
-                let quantity = document.getElementsByClassName("itemQuantity").value
+            let ttPrice = document.getElementById("totalPrice").textContent;
+            let ttQuantity = document.getElementById("totalQuantity").textContent;
+            //le prix du produit qu'on veut supprimer x  la quantité supprimer. (myparamPrice )
+            let quantity = document.getElementsByClassName("itemQuantity").value;
                 
-                let ttPriceAsupp = parseInt(quantity) * parseInt(e.target.myParamPrice)
-                let ttQuantiteAsupp = parseInt(price) * parseInt(e.target.myParamId)
-                ttPrice = document.getElementById("totalPrice").textContent = ttPriceAsupp;
-                ttQuantity = document.getElementById("totalQuantity").textContent = ttQuantiteAsupp;
-                ttPriceAsupp * ttQuantiteAsupp;
+            let ttPriceAsupp = parseInt(quantity) * parseInt(e.target.myParamPrice);
+            let ttQuantiteAsupp = parseInt(price) * parseInt(e.target.myParamId);
+            ttPrice = document.getElementById("totalPrice").textContent = ttPriceAsupp;
+            ttQuantity = document.getElementById("totalQuantity").textContent = ttQuantiteAsupp;
                 //supprimer ce produit du localStorage et toto remove
-                return (
-                    localStorage.removeClear("produits"),
-                    console.log(ttPriceAsupp)
-                );
-            }  
-        }
+            
+        }   
+    }
     
-
+    
 
    
 }     
@@ -211,87 +206,60 @@ function suppItem(e) {
 
 //----------------Partie Formulaire-----------------
 
-function getForm() {
-    
-        
-    /*let formData = new FormData();
-    
-    
-    
-    let firstName = document.getElementById('firstname');
-    firstName.addEventListener('input', () => {
-        
-        if (formData.append(firstName.value) === false) {
-            document.getElementById('firstNameErrorMsg').textContent =
-              'Format incorrect';
-          } else {
-            document.getElementById('firstNameErrorMsg').textContent = '';
-        }
-    });
-       console.log(formData);
+function getForm(e) {
+    e.preventDefault();
+    let contact = {};
+    const selectForm = document.forms[0];
 
-    let lastName = document.getElementById('lastname');
-        lastName.addEventListener('input', () => {
-            
-        if (formData.append(lastName.value) === false) {
-            document.getElementById('lastNameErrorMsg').textContent =
-              'Format incorrect';
-            } else {
-            document.getElementById('lastNameErrorMsg').textContent = '';
-        }
-    });
-      
-    let adress = document.getElementById('adress');
-    adress.addEventListener('input', () => {
-        
-        if (formData.append(adress.value) === false) {
-            document.getElementById('adressErrorMsg').textContent =
-              'Format incorrect';
-            } else {
-            document.getElementById('adressErrorMsg').textContent = '';
-        }
-    });
-    
-    let city = document.getElementById('city');
-    city.addEventListener('input', () => {
-        
-        if (formData.append(city.value) === false) {
-            document.getElementById('cityErrorMsg').textContent =
-              'Format incorrect';
-            } else {
-            document.getElementById('cityErrorMsg').textContent = '';
-        }
-    });
-    let email = document.getElementById('email');
-    email.addEventListener('input', () => {
-        
-        if (formData.append(email.value) === false) {
-            document.getElementById('emailErrorMsg').textContent =
-              'Format incorrect';
-            } else {
-            document.getElementById('emailErrorMsg').textContent = '';
-        }
-    });
-    
-    const commande = documentgetElemebtById("order");
-        //recuperer le formulaire client lorsque je clique sur commander
-    commande.addEventListener("click", (e) =>{
-        
-        let sendFirstName = document.getElementById('firstName');
-        let sendLastName = document.getElementById('lastName');
-        let sendAdress = document.getElementById('adress');
-        let sendCity = document.getElementById('city');
-        let sendMail = document.getElementById('mail');
+    const firstName = selectForm.elements.firstName.value;
+    if (checkData('firstName',firstName)){
+        return false;
+    }
+    contact.firstName = firstName;
 
-        let idProducts = [];
-        for (let i = 0; i<produitStorage.length;i++) {
-            idProducts.push(produitStorage[i].prod_.id);
-        }
-        console.log(idProducts);
+    const lastName = selectForm.elements.lastName.value;
+    if(checkData('lastName',lastName)){
+        return false;
+    }
+     contact.lastName = lastName;
+    
+     const adress = selectForm.elements.adress.value; 
+     if(checkData('adress',adress)){
+        return false;
+     }
+      contact.adress = adress;
 
-    })*/
+      const city = selectForm.elements.city .value;
+      if(checkData('city ',city )){
+        return false;
+      }
+       contact.city  = city ;
+
+       const email = selectForm.elements.email.value;
+       if (checkData('email',email)){
+        return false;
+       }
+       contact.email = email;  
+    let products = checkCart();
+    if (products.length != 0){
+        let data = {
+            contact,
+            products
+        };
+        sendData(data);
+    } else {
+        return false;
+    }
 }
 
+function checkContent(e){
+    if(checkData(e.target.id, e.target.value)){
+        return false;
+    }else{
+        let msg =getElementById(e.target.id + "ErrorMsg");
+        msg.textContent = '';
+    }
+}
 //envoyer les info du clien au localstorage
 
     

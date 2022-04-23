@@ -260,12 +260,53 @@ function checkContent(e){
         msg.textContent = '';
     }
 }
-//envoyer les info du clien au localstorage
 
+function checkData(type,val) {
+    let ret = false;
+    switch(type){
+        case 'firsName':
+        case 'lastName':
+        case 'city':
+            ret = checkNoNumber(type,val);
+            break;
+        case 'adress':
+            ret = checkAdress(type, val);
+            break;
+        case 'email':
+            ret = checkEmail(type, val);
+            break;
+    }
+    return ret;
+}
+function checkNoNumber(type,val){
     
+    const checkNoNumber = /[0-9]/;
+    if(checkNoNumber.test(val) === true || checkSpecialCaracter.test(val) === true || val === ""){
+        let msg = getElementById(type + "ErrorMsg");
+        msg.textContent = 'you must fill the field with only letters';
+        return true;
+    }
+}    
 
+function checkAdress(type, val){
+    const checkSpecialCaracter = /[§!@#$%¨^&*(),.?":{}|<>|]/;
+    if(checkSpecialCaracter.test(val) === true || val == "") {
+        let msg = getElementById(type + "errorMsg");
+        msgtextContent = 'you must fill the field with only letters and numbers';
+        return true;
+    }
+    return false
+}
 
-
+function checkEmail(type, val){
+    const checkMail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if(checkMail.test(val) === false){
+        let msg = getElementById(type + "errorMsg");
+        msg.textContent = 'you must fill the field  with a valid email';
+        return true;
+    }
+    return false;
+}
 
    
 

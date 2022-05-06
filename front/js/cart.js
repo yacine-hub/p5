@@ -145,8 +145,22 @@ function displayProduct(prod, qty, color){
 
 function getModifQuantity(e){
     
-    let ttPrice = document.getElementById("totalPrice").textContent;
-    let ttQuantity = document.getElementById("totalQuantity").textContent;
+    const newQuant = parseInt(e.target.value);
+    console.log(newQuant);
+    cart = JSON.parse(localStorage.getItem("produits"));
+    let error = false;
+    console.log(error);
+    cart.forEach((elem) => {
+        if(elem._id === e.target.myParamId && elem.color === e.target.myParamOpt){
+            console.log(elem.qty);
+            console.log(document.getElementById("totalQuantity").textContent);
+            console.log(document.getElementById("totalPrice").textContent);
+            console.log(parseInt(e.target.myParamPrice));
+            console.log(document.getElementById(`id_${e.target.myParamId}`).textContent);
+            console.log(elem._id);
+        }
+    });
+    
     
     console.log(e)
     
@@ -223,11 +237,11 @@ function getForm(e) {
     }
      contact.lastName = lastName;
     
-     const adress = selectForm.elements.adress.value; 
-     if(checkData('adress',adress)){
+     const address = selectForm.elements.address.value; 
+     if(checkData('address',address)){
         return false;
      }
-      contact.adress = adress;
+      contact.address = address;
 
       const city = selectForm.elements.city .value;
       if(checkData('city ',city )){
@@ -246,12 +260,51 @@ function getForm(e) {
             contact,
             products
         };
-        sendData(data);
+        console.log(data);
+        //sendData(data);
+        
     } else {
+        alert("Votre panier est vide")
         return false;
     }
 }
+function sendData(data){
+    const apiURL = "http://localhost:3000/api/products/order";
 
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    };
+
+    fetch(apiURL, requestOptions)
+        then(function(response) {
+            if (response.ok){
+                response.json().then(function(resp){
+                    if (resp.orderId) {
+                        localStorage.removeItem('produitStorage');
+                        window.location = "confirmation.html?orderid=" + resp.orderId;
+
+                    }
+                });
+
+            } else {
+                alert(response);
+            }
+        })
+        .catch(function(err){
+        
+        });
+}
+function checkCart(){
+    let products = [];
+    const article = document.getElementsByClassName("cart__item");
+    for( let i = 0; i < article.length; i++ ) {
+        console.log(i);
+        products.push(article[i].getAttribute("data-id"));
+    }
+    return products;
+}
 function checkContent(e){
     if(checkData(e.target.id, e.target.value)){
         return false;
@@ -280,8 +333,8 @@ function checkData(type,val) {
 }
 function checkNoNumber(type,val){
     
-    const checkNoNumber = /[0-9]/;
-    if(checkNoNumber.test(val) === true || checkSpecialCaracter.test(val) === true || val === ""){
+    const checkNumber = /[0-9]/;
+    if(checkNumber.test(val) === true || val === ""){
         let msg = getElementById(type + "ErrorMsg");
         msg.textContent = 'you must fill the field with only letters';
         return true;
@@ -301,12 +354,14 @@ function checkAdress(type, val){
 function checkEmail(type, val){
     const checkMail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if(checkMail.test(val) === false){
-        let msg = getElementById(type + "errorMsg");
+        let msg = getById(type + "errorMsg");
         msg.textContent = 'you must fill the field  with a valid email';
         return true;
     }
     return false;
 }
+
+
 
    
 

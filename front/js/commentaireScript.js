@@ -1,15 +1,19 @@
+commentaireScript
+
+
+
+    
+
+
 /* attendre que le DOM soit charger, appel la 1er fonction*/
 window.onload = function(){
     console.log("DOMContentLoaded");
     getProducts();
     }
-/*contacter le back*/
-//recuperer par la route api/products
-/**
- * 
- */
+/*on contacte le back avec la methode fetch quand la promesse de la reponse est resolu on a parser qui nous permet
+ d'avoir un objet JSON qui est data qui est en argument de la fontion displayProduct */
+
 function getProducts(){
-    
     fetch("http://localhost:3000/api/products")
         .then(response => response.json()
             .then(data =>{
@@ -17,12 +21,17 @@ function getProducts(){
             }) 
         )
 }
-// Je fait une boucle sur le tableau
+/*function displayproduct(data){
+    //console.log(data)
+    for(let i in data){
+        createProduct(data[i]);
+    }
 
-/**
- * 
- * @param {*} data 
- */
+}*/
+// Je fait une boucle sur le tableau
+/* a chaque tours de boucle de mon data je recupere un produits complet et je l'envoie a  la fonction createProduct 
+(ligne 38 ) avec argument product
+ensuite */
 function displayproduct(data){
     //console.log(data)
     for(let product of data){
@@ -65,6 +74,3 @@ function createProduct(product){
     document.getElementById("items").append(productLink)
   
 }
-
-
-

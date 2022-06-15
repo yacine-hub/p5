@@ -19,7 +19,11 @@ function getProduct(){
         
         
 }
-
+/**
+ * 
+ * @param {*} data 
+ * @param {*} productID 
+ */
 function displayProduct(data,productID){
     console.log(data);
     console.log(productID);
@@ -41,7 +45,10 @@ function displayProduct(data,productID){
    attachEvent(productID); 
     
 }
-
+/**
+ * 
+ * @param {*} productID 
+ */
 function attachEvent(productID){
     document.getElementById("addToCart").addEventListener("click",() =>{
         add(productID);
@@ -52,7 +59,10 @@ function attachEvent(productID){
 
 
 // console.log(checkColor("red"));
-
+/**
+ * 
+ * @param {*} id 
+ */
 function add(id){
     
     const colorSelect = document.getElementById("colors");
@@ -86,7 +96,11 @@ function add(id){
     //declare la variable "produitStorage"
         //******JSON.parse converti les données au format JSON en objet javascript dans le localstorage
     //const produitStorage = [];
-
+/**
+ * 
+ * @param {*} prod 
+ * @returns 
+ */
 function stockage(prod){
     console.log(prod);
     // si un produit est deja un produit enregistré
@@ -113,6 +127,12 @@ function stockage(prod){
     localStorage.setItem('produits', JSON.stringify(produitStorage));
     return true; 
 }
+/**
+ * 
+ * @param {*} panier 
+ * @param {*} prod 
+ * @returns 
+ */
 function checkBasket (panier, prod){
     let control = true;    
     panier.forEach(elem => {
@@ -125,6 +145,11 @@ function checkBasket (panier, prod){
     return control;
       
 }
+/**
+ * 
+ * @param {*} color 
+ * @returns 
+ */
 function checkColor(color){
     if(!color){
         alert("veuillez selectionner une couleur")
@@ -133,10 +158,14 @@ function checkColor(color){
     return true;
 }
 // 2:Verifie la valeur du champ  input (id quantity) cet valeur doit etre sup a 0 inferieur a 100 
-
+/**
+ * 
+ * @param {*} qty 
+ * @returns 
+ */
 function checkQuantity(qty){
     if(parseInt(qty) < 1 || parseInt(qty) > 100){
-        alert("vous ne pouvez séléctionner que de 1 a 100")
+        alert("vous ne pouvez séléctionner que des quantité de  1 a 100")
         return false;
     }
     return qty;

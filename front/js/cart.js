@@ -1,14 +1,12 @@
+
 window.onload = function(){
     getCart();
 }
-
-
-
-
 /* si le panier est vide = panier vide 
 sinon afficher le ou les produits selectionner(nom du produit, image du produit, couleur du produit, quantité)
 je fait la boucle, je creer les éléments
 */
+
 function getCart(){
     let produitStorage = JSON.parse(localStorage.getItem("produits"));
     console.log(produitStorage);
@@ -42,6 +40,7 @@ function getCart(){
     }
     
 }
+/* j'attache un evenement click*/
 function addEvent(){
     document.getElementById("order").addEventListener('click', getForm );
 }
@@ -114,6 +113,9 @@ function displayProduct(prod, qty, color){
     quantité.setAttribute("min","1");
     quantité.setAttribute("max","100");
     quantité.setAttribute("value",qty);
+    quantité.myParamId = prod._id;
+    quantité.myParamOpt = color;
+    quantité.myParamPrice = prod.price;
     // attacher un evement a l'element quantité (adevenListener) change 
     quantité.addEventListener("change",(e)=>{
         getModifQuantity(e);
@@ -129,17 +131,18 @@ function displayProduct(prod, qty, color){
     prodDelete.myParamId = prod._id;
     prodDelete.myParamOpt = color;
     prodDelete.myParamPrice = prod.price;
-    prodDelete.addEventListener("click",(e)=>{
+    /*prodDelete.addEventListener("click",(e)=>{
         suppItem(e);
-    })
+    })*/
+    prodDelete.addEventListener("click", (e) => {
+        const elt = e.target;
+        const ancestor = elt.closest("article");
+        deleteProd(prod, color, ancestor);
+    });
     //attacher un evenement qui appel la fonction "suppItem" (adeventListener) 
     //lorsque je clique sur supprimer, closest remonte au parent
     
 }
-
-/* calcul total des produits selectionner
-    additionner et soustraire les produit ajouter ou supprimer*/
-    
 
 //partie modification 
 
@@ -153,10 +156,9 @@ function getModifQuantity(e){
     cart.forEach((elem) => {
         if(elem._id === e.target.myParamId && elem.color === e.target.myParamOpt){
             console.log(elem.qty);
-            console.log(document.getElementById("totalQuantity").textContent);
             console.log(document.getElementById("totalPrice").textContent);
             console.log(parseInt(e.target.myParamPrice));
-            console.log(document.getElementById(`id_${e.target.myParamId}`).textContent);
+            document.getElementById('totalQuantity').textContent = newQuant;
             console.log(elem._id);
         }
     });
@@ -179,8 +181,8 @@ function suppItem(e) {
    
     let produitStorage = JSON.parse(localStorage.getItem("produits"));
         
-
-    for (i = 0; i < produitStorage; i++) {
+ 
+    for (i = 0; i < produitStorage; i++){
             
             /*
             if (produitStorage[i].== 1 && ttProduit == 1 ){
@@ -202,7 +204,7 @@ function suppItem(e) {
             ttPrice = document.getElementById("totalPrice").textContent = ttPriceAsupp;
             ttQuantity = document.getElementById("totalQuantity").textContent = ttQuantiteAsupp;
                 //supprimer ce produit du localStorage et toto remove
-            
+            localStorage.clear();
         }   
     }
     
@@ -211,6 +213,52 @@ function suppItem(e) {
    
 }     
 
+function updatedCart(prod, color, e){
+
+    console.log(prod)  // identifiant du canapé à mettre à jour
+    console.log(color)  // color du canapé à mettre à jour
+    console.log(e.target.value) // nouvelle valeur de champ quantité  newQty
+    // on récupére le localstorage.
+    let produitStorage = JSON.parse(localStorage.getItem("produits"));
+    // on fait une boucle sur le tableau du local storage
+    for (i = 0; i < produitStorage; i++){
+        if(produitStorage[i]._id && produitStorage[i].color == newQuant){
+                let oldQty = elem.qty;
+                document.getElementById("totalQuantity").textContent
+                document.getElementById('totalPrice').textContent
+                totalPrice = priceTotal - (oldQty *  prod.price) + (newQty * prod.price)
+
+        }
+    }
+    updateTotal(totalQty, totalPrice)
+    // pour chaque tour de boucle si _id et color sont égale à celle du produit Alors c'est celui la qu'il faut.
+    // Dans la condition, on récupérepre la qty de l'element (Ancienne quantité) let oldQty = elem.qty
+    // on récupére la quantité totale actuelle (qtyTotale) et le prix total actuel (priceTotal)
+    // on met à jour la quantité totale (totalQty = qtyTotale - oldQty + newQty) 
+    // on met à jour la quantité de ce produit dans le local storage
+    // on met à jour la prix total (totalPrice = priceTotal - (oldQty *  prod.price) + (newQty * prod.price)
+    // on met à jour l'affichage on envoie le tout à updateTotal
+    //updateTotal(totalQty, totalPrice)
+}
+
+function deleteProd(prod, color, ancestor){
+    
+    console.log(prod)
+    console.log(color)
+    console.log(ancestor)
+    // IDEM QUE UPDATE MAIS AVEC UNE SUPPPRESSION
+    //updateTotal(totalQty, totalPrice)
+
+}
+
+
+function updateTotal(totalQty, totalPrice){
+    document.getElementById("totalQuantity").innerText = totalQty;
+    document.getElementById('totalPrice').innerText =  totalPrice;
+}
+/* calcul total des produits selectionner
+    additionner et soustraire les produit ajouter ou supprimer*/
+    
 
 
 
@@ -320,10 +368,10 @@ function checkData(type,val) {
         case 'firsName':
         case 'lastName':
         case 'city':
-            ret = checkNoNumber(type,val);
+            ret = checkNoNumber(type, val);
             break;
         case 'adress':
-            ret = checkAdress(type, val);
+            ret = checkAddress(type, val);
             break;
         case 'email':
             ret = checkEmail(type, val);
@@ -334,28 +382,29 @@ function checkData(type,val) {
 function checkNoNumber(type,val){
     
     const checkNumber = /[0-9]/;
-    if(checkNumber.test(val) === true || val === ""){
-        let msg = getElementById(type + "ErrorMsg");
+    if(checkNumber.test(val) === true || checkSpecialCharacter.test(val) === true || val === "") {
+        let msg = getById(type + "ErrorMsg");
         msg.textContent = 'you must fill the field with only letters';
         return true;
     }
 }    
 
-function checkAdress(type, val){
-    const checkSpecialCaracter = /[§!@#$%¨^&*(),.?":{}|<>|]/;
-    if(checkSpecialCaracter.test(val) === true || val == "") {
-        let msg = getElementById(type + "errorMsg");
-        msgtextContent = 'you must fill the field with only letters and numbers';
+function checkAddress(type, val){
+    const checkSpecialCharacter = /[§!@#$%¨^&*(),.?":{}|<>|]/;
+    if(checkSpecialCharacter.test(val) === true || val == "") {
+        let msg = getById(type + "ErrorMsg");
+        msg.textContent = 'you must fill the field with only letters and numbers';
         return true;
     }
     return false
+    
 }
-
+//console.log(checkSpecialCharacter);
 function checkEmail(type, val){
     const checkMail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if(checkMail.test(val) === false){
-        let msg = getById(type + "errorMsg");
-        msg.textContent = 'you must fill the field  with a valid email';
+        let msg = getById(type + "ErrorMsg");
+        msg.textContent = 'You must fill the field  with a valid email';
         return true;
     }
     return false;

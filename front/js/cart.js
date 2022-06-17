@@ -206,11 +206,7 @@ function suppItem(e) {
                 //supprimer ce produit du localStorage et toto remove
             localStorage.clear();
         }   
-    }
-    
-    
-
-   
+    }   
 }     
 
 function updatedCart(prod, color, e){
@@ -218,27 +214,30 @@ function updatedCart(prod, color, e){
     console.log(prod)  // identifiant du canapé à mettre à jour
     console.log(color)  // color du canapé à mettre à jour
     console.log(e.target.value) // nouvelle valeur de champ quantité  newQty
+    
     // on récupére le localstorage.
-    let produitStorage = JSON.parse(localStorage.getItem("produits"));
+    let produitStorage = JSON.parse(localStorage.getItem('produits'));
     // on fait une boucle sur le tableau du local storage
-    for (i = 0; i < produitStorage; i++){
-        if(produitStorage[i]._id && produitStorage[i].color == newQuant){
-                let oldQty = elem.qty;
-                document.getElementById("totalQuantity").textContent
-                document.getElementById('totalPrice').textContent
-                totalPrice = priceTotal - (oldQty *  prod.price) + (newQty * prod.price)
+    let oldQty = 0;
+    console.log(produitStorage);
+    
+    for (let i in produitStorage){
+        if(produitStorage[i]._id == prod._id && produitStorage[i].color == color){
+            produitStorage[i].qty
+            produitStorage[i].qty = e.target.value;
+            localStorage.setItem('produits',JSON.stringify(produitStorage));
+                //document.getElementById("totalQuantity").textContent
+                //document.getElementById('totalPrice').textContent
+                //totalPrice = priceTotal - (oldQty *  prod.price) + (newQty * prod.price)
 
         }
     }
-    updateTotal(totalQty, totalPrice)
-    // pour chaque tour de boucle si _id et color sont égale à celle du produit Alors c'est celui la qu'il faut.
-    // Dans la condition, on récupérepre la qty de l'element (Ancienne quantité) let oldQty = elem.qty
-    // on récupére la quantité totale actuelle (qtyTotale) et le prix total actuel (priceTotal)
-    // on met à jour la quantité totale (totalQty = qtyTotale - oldQty + newQty) 
-    // on met à jour la quantité de ce produit dans le local storage
-    // on met à jour la prix total (totalPrice = priceTotal - (oldQty *  prod.price) + (newQty * prod.price)
-    // on met à jour l'affichage on envoie le tout à updateTotal
-    //updateTotal(totalQty, totalPrice)
+    const oldPrice = 1 * parseInt(prod.price);
+    const newP = e.target.value * parseInt(prod.price);
+    const tot = document.getElementById('totalPrice').textContent;
+    console.log(tot)
+    
+    document.getElementById('totalPrice').textContent = parseInt(tot) - parseInt(oldPrice) + parseInt(newP)
 }
 
 function deleteProd(prod, color, ancestor){

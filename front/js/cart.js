@@ -15,7 +15,6 @@ function getCart(){
     if (produitStorage === null){
         alert("votre panier est vide")
     } else {
-        
         for (let i in produitStorage){ // insert les éléments du fichier cart.html 
             fetch ("http://localhost:3000/api/products/"+ produitStorage[i]._id)
             .then(response => response.json())
@@ -36,7 +35,7 @@ function getCart(){
                 tp.textContent = totPrice; 
             }) 
         }
-       addEvent(); 
+        addEvent();     
     }
     
 }
@@ -44,7 +43,6 @@ function getCart(){
 function addEvent(){
     document.getElementById("order").addEventListener('click', getForm );
 }
-
 function displayProduct(prod, qty, color){
     
     console.log(prod);
@@ -128,20 +126,14 @@ function displayProduct(prod, qty, color){
     deleteSettings.appendChild(prodDelete);
     prodDelete.textContent = "supprimer";
     prodDelete.className = "deleteItem";
-    prodDelete.myParamId = prod._id;
-    prodDelete.myParamOpt = color;
-    prodDelete.myParamPrice = prod.price;
-    /*prodDelete.addEventListener("click",(e)=>{
-        suppItem(e);
-    })*/
+    
     prodDelete.addEventListener("click", (e) => {
         const elt = e.target;
         const ancestor = elt.closest("article");
-        deleteProd(prod, color, ancestor);
+        deleteProd(prod, color, ancestor, e);
     });
-    //attacher un evenement qui appel la fonction "suppItem" (adeventListener) 
+    //attacher un evenement qui appel la fonction  (adeventListener) 
     //lorsque je clique sur supprimer, closest remonte au parent
-    
 }
 
 //partie modification 
@@ -162,52 +154,8 @@ function getModifQuantity(e){
             console.log(elem._id);
         }
     });
-    
-    
     console.log(e)
-    
 }
-
-function suppItem(e) {
-    //closest pour remonter jusqu'au parent( article,class..)
-    //appeller la fonction qui modifie le prix total (getElementbyId)
-    //appel la fonction qui modifie la quantité total
-    
-    const toto = e.target.closest("article");
-    toto.remove();
-    console.log(e);
-    
-   
-   
-    let produitStorage = JSON.parse(localStorage.getItem("produits"));
-        
- 
-    for (i = 0; i < produitStorage; i++){
-            
-            /*
-            if (produitStorage[i].== 1 && ttProduit == 1 ){
-                return (
-                    localStorage.removeItem("produits");
-                    console.log("supprime tout le panier")
-                );
-
-            }*/
-        if (produitStorage[i]._id == e.target.myParamId &&  produitStorage[i].color == e.target.myParamOpt){
-                
-            let ttPrice = document.getElementById("totalPrice").textContent;
-            let ttQuantity = document.getElementById("totalQuantity").textContent;
-            //le prix du produit qu'on veut supprimer x  la quantité supprimer. (myparamPrice )
-            let quantity = document.getElementsByClassName("itemQuantity").value;
-                
-            let ttPriceAsupp = parseInt(quantity) * parseInt(e.target.myParamPrice);
-            let ttQuantiteAsupp = parseInt(price) * parseInt(e.target.myParamId);
-            ttPrice = document.getElementById("totalPrice").textContent = ttPriceAsupp;
-            ttQuantity = document.getElementById("totalQuantity").textContent = ttQuantiteAsupp;
-                //supprimer ce produit du localStorage et toto remove
-            localStorage.clear();
-        }   
-    }   
-}     
 
 function updatedCart(prod, color, e){
 
@@ -237,19 +185,40 @@ function updatedCart(prod, color, e){
     const tot = document.getElementById('totalPrice').textContent;
     console.log(tot)
     
-    document.getElementById('totalPrice').textContent = parseInt(tot) - parseInt(oldPrice) + parseInt(newP)
+    document.getElementById('totalPrice').textContent = parseInt(tot) - parseInt(oldPrice) + parseInt(newP);
 }
 
-function deleteProd(prod, color, ancestor){
+function deleteProd(prod, color, ancestor,e){
     
     console.log(prod)
     console.log(color)
     console.log(ancestor)
+    console.log(e)
+    const toto = e.target.closest("article");
+    //toto.remove();
+   
+    let produitStorage = JSON.parse(localStorage.getItem("produits"));
+        
+    for (i = 0; i < produitStorage; i++){
+            
+        if (produitStorage[i]._id == e.target &&  produitStorage[i].color == e.target){
+                
+            let ttPrice = document.getElementById("totalPrice").textContent;
+            let ttQuantity = document.getElementById("totalQuantity").textContent;
+            //le prix du produit qu'on veut supprimer x  la quantité supprimer. (myparamPrice )
+            let quantity = document.getElementsByClassName("itemQuantity").value;
+            let ttPriceAsupp = parseInt(quantity) * parseInt(e.target);
+            let ttQuantiteAsupp = parseInt(price) * parseInt(e.target);
+            ttPrice = document.getElementById("totalPrice").textContent = ttPriceAsupp;
+            ttQuantity = document.getElementById("totalQuantity").textContent = ttQuantiteAsupp;
+                //supprimer ce produit du localStorage et toto remove
+            localStorage.clear();
+        }   
+    } 
     // IDEM QUE UPDATE MAIS AVEC UNE SUPPPRESSION
     //updateTotal(totalQty, totalPrice)
-
+    toto.remove();    
 }
-
 
 function updateTotal(totalQty, totalPrice){
     document.getElementById("totalQuantity").innerText = totalQty;
